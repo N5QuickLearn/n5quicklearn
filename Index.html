@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>N5 Ninja</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Mobile-first styles */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 15px;
+            background: #f0f7ff;
+            line-height: 1.6;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        button {
+            background: #ff758c;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            margin: 10px 0;
+            width: 100%;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #ddd;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #4CAF50;
+            border-radius: 4px;
+            width: 0%;
+            transition: 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <h1>🗻 N5 Ninja</h1>
+    
+    <!-- Word Card -->
+    <div class="card">
+        <h3>Today's Vocabulary</h3>
+        <div id="wordDisplay">食べます (たべます) - to eat</div>
+        <p class="hint">💡 Memory Hack: "Tabe-" sounds like "table" - imagine eating tables!</p>
+        <button onclick="nextWord()">Next Word →</button>
+    </div>
+    
+    <!-- Progress Tracker -->
+    <div class="card">
+        <h3>Your Progress</h3>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p>Words Learned: <span id="counter">0</span>/50</p>
+    </div>
+
+    <script>
+    // Vocabulary List
+    const words = [
+        ["あります (あります)", "to exist (things)", "Imagine a RICE (ari-) bowl existing"],
+        ["行きます (いきます)", "to go", "IKI means 'go' in many languages!"],
+        ["見ます (みます)", "to see", "MI like 'me' - see yourself!"]
+    ];
+
+    let currentWord = 0;
+    let learnedCount = 0;
+
+    function nextWord() {
+        currentWord = (currentWord + 1) % words.length;
+        document.getElementById("wordDisplay").innerHTML = 
+            `<strong>${words[currentWord][0]}</strong><br>
+            ${words[currentWord][1]}`;
+            
+        document.querySelector(".hint").textContent = `💡 ${words[currentWord][2]}`;
+        
+        // Update progress
+        learnedCount++;
+        document.getElementById("counter").textContent = learnedCount;
+        document.getElementById("progressFill").style.width = 
+            `${(learnedCount/50)*100}%`;
+            
+        // Save to phone storage
+        localStorage.setItem('progress', learnedCount);
+    }
+
+    // Load saved progress
+    window.onload = function() {
+        const saved = localStorage.getItem('progress');
+        if(saved) {
+            learnedCount = parseInt(saved);
+            document.getElementById("counter").textContent = learnedCount;
+            document.getElementById("progressFill").style.width = 
+                `${(learnedCount/50)*100}%`;
+        }
+    }
+    </script>
+</body>
+</html>
